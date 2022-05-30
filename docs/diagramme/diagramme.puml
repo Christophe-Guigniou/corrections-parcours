@@ -1,12 +1,12 @@
 @startuml
 
 entity Item {
-    *label
+    *name
     *slug
 }
 
 entity ItemValues {
-    *label
+    *name
     *value
     time
     startup_time
