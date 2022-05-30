@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- This page will display a form with fields with the goal of provide a website time estimation -->
+
+    <header class="main-header">
+        <span class="site-name">Estimator</span>
+        <nav class="main-nav">
+            <ul>
+                <li>
+                    <a href="./index.html">
+                        Calculator
+                    </a>
+                </li>
+                <li>
+                    <a href="./estimation-list.html">
+                        Dernières estimations
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="main-content">
+        <h1 class="main-title">Calculator</h1>
+        <form class="estimator-form" action="result.html">
+            <div class="errors">
+                Le nom du projet est obligatoire.
+             </div>
+
+            <div class="input-group">
+                <label class="main-label" for="project-name">Nom du projet</label>
+                <input type="text" id="project-name" name="project-name" placeholder="Nom">
+            </div>
+
+            <div class="input-group">
+                <span class="main-label">Type de projet</span>
+
+                <select name="project-type">
+                    <option value="">Choisir un type de projet</option>
+                    <option value="simple">Laravel</option>
+                    <option value="complex">Laravel + React</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <span class="main-label">Développement génériques</span>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="homepage" name="generic-templates[]" value="homepage">
+                    <label for="homepage">
+                        Homepage
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="contact" name="generic-templates[]" value="contact">
+                    <label for="contact">
+                        Contact
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="blog" name="generic-templates[]" value="blog">
+                    <label for="blog">
+                        Blog
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="boutique" name="generic-templates[]" value="boutique">
+                    <label for="boutique">
+                        Boutique
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="editorial" name="generic-templates[]" value="editorial">
+                    <label for="editorial">
+                        Page éditorial
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="events" name="generic-templates[]" value="events">
+                    <label for="events">
+                        Évènements
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="jobs" name="generic-templates[]" value="jobs">
+                    <label for="jobs">
+                        Offres d'emplois
+                    </label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="main-label">Développements spécifiques</span>
+
+                <div class="specific-template-list" id="specificTemplateList">
+
+                </div>
+
+                <button class="button button-icon" type="button" id="addSpecificTemplate"><i
+                        class="fa fa-plus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <span class="main-label">Type de design</span>
+
+                <select name="design-type">
+                    <option value="">Choisir un type de design</option>
+                    <option value="simple">Design simple</option>
+                    <option value="complex">Design complexe</option>
+                    <option value="animations">Design complexe avec animations</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button">Obtenir l'estimation</button>
+        </form>
+    </main>
+    <script src="app.js"></script>
+</body>
+
+</html>
