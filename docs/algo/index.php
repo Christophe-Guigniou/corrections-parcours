@@ -106,18 +106,66 @@ L'index "0" correspond à :
 */
 $dataSent = $dataSentArray[0];
 
-// -------------- Ton algo ici --------------
+// -- Ton algo ici 
+
+// Initialisation des variables utiles
+$total = 0;
+$percentage = 0;
+$startup = 0;
+$lines = [];
+$additional = [];
+
+$design = $dataSent['designType'];
+$project = $dataSent['projectType'];
 
 
-// Le résultat devra avoir cette forme, à toi de remplir le total, 
-// le tableau de lignes et les lignes de temps additionnel.
-$result = [
-    'total' => 0,
-    'lines' => [],
-    'additional' => []
+// Ajout des pourcentages de temps supplémentaires
+$percentage += $designTypes[$design]['total_percentage'];
+$percentage += $projectTypes[$project]['total_percentage'];
+
+// Ajout du temps de mise en place
+$lines[] = [
+    'name' => 'Mise en place du projet',
+    'time' => $projectTypes[$project]['startup_time']
 ];
 
-// -------------- Fin de ton algo ------------
+// Ajout du temps de mise en place au total
+$total += $projectTypes[$project]['startup_time'];
+
+// Ajout des temps de développements génériques
+foreach ($dataSent['genericDevelopments'] as $development) {
+    $devTime = $genericDevelopments[$development];
+    $total += $devTime;
+
+    $lines[] = [
+        'name' => $development,
+        'time' => $devTime
+    ];
+}
+
+// Ajouts des temps additionnels
+$additional[] = [
+    'name' => 'Type de projet : ' . $project,
+    'time' => $total * $projectTypes[$project]['total_percentage'] / 100
+];
+
+$additional[] = [
+    'name' => 'Type de design: ' . $design,
+    'time' => $total * $designTypes[$design]['total_percentage'] / 100
+];
+
+
+$total += round($total * $percentage / 100);
+
+
+// Le résultat devra avoir cette forme, à toi de remplir le total, le tableau de lignes et les lignes de temps additionnel.
+$result = [
+    'total' => $total,
+    'lines' => $lines,
+    'additional' => $additional
+];
+
+// Fin de ton algo
 
 // Ne pas toucher ci-dessous
 include('functions.php');

@@ -1,0 +1,29 @@
+@startuml
+
+entity EstimationSettings {
+    *label
+    *slug
+}
+
+entity EstimationSettingsValues {
+    *label
+    *value
+    time
+    startup_time
+    total_percentage
+}
+
+entity Estimation {
+    *label
+    *total_time
+}
+
+entity EstimationLine {
+    *label
+    *time
+    *type
+}
+
+Estimation ||--o{ EstimationLine
+EstimationSettings ||--o{ EstimationSettingsValues
+@enduml
