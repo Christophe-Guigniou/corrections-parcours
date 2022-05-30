@@ -1,11 +1,11 @@
 @startuml
 
-entity EstimationSettings {
+entity Item {
     *label
     *slug
 }
 
-entity EstimationSettingsValues {
+entity ItemValues {
     *label
     *value
     time
@@ -13,12 +13,12 @@ entity EstimationSettingsValues {
     total_percentage
 }
 
-entity Estimation {
+entity Estimate {
     *label
     *total_time
 }
 
-entity EstimationLine {
+entity EstimateLines {
     *label
     *time
     *type
