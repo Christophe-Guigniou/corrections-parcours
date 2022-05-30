@@ -24,6 +24,6 @@ entity EstimateLines {
     *type
 }
 
-Estimation ||--o{ EstimationLine
-EstimationSettings ||--o{ EstimationSettingsValues
+Estimate ||--o{ EstimateLines
+Item ||--o{ ItemValues
 @enduml
