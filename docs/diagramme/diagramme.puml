@@ -1,29 +1,29 @@
 @startuml
 
-entity Item {
-    *name
+entity EstimationSettings {
+    *label
     *slug
 }
 
-entity ItemValues {
-    *name
+entity EstimationSettingsValues {
+    *label
     *value
     time
     startup_time
     total_percentage
 }
 
-entity Estimate {
+entity Estimation {
     *label
     *total_time
 }
 
-entity EstimateLines {
+entity EstimationLine {
     *label
     *time
     *type
 }
 
-Estimate ||--o{ EstimateLines
-Item ||--o{ ItemValues
+Estimation ||--o{ EstimationLine
+EstimationSettings ||--o{ EstimationSettingsValues
 @enduml
