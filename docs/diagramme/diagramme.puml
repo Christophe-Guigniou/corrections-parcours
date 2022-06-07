@@ -1,27 +1,28 @@
 @startuml
 
 entity EstimationSettings {
-    *label
-    *slug
+    label
+    slug
+    type
 }
 
 entity EstimationSettingsValues {
-    *label
-    *value
+    label
+    value
     time
     startup_time
     total_percentage
 }
 
 entity Estimation {
-    *label
-    *total_time
+    label
+    total_time
 }
 
 entity EstimationLine {
-    *label
-    *time
-    *type
+    label
+    time
+    type
 }
 
 Estimation ||--o{ EstimationLine

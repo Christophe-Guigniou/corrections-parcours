@@ -6,7 +6,7 @@ Ouvre ce fichier dans ton navigateur, ou lance un serveur php avec la commande :
 
 Analyse le résultat attendu. Les contenus d'exemple seront automatiquement enlevés dès que tu fourniras des valeurs dans les tableaux `lines` et `additional`.
 
-Chaque entrée dans `lines` et `additional` devra avoir cette form : 
+Chaque entrée dans `lines` et `additional` devra avoir cette form :
 
     [
         "name" => "Nom du dev",
@@ -91,7 +91,7 @@ $dataSentArray = [
  * Algo
  */
 
-/* 
+/*
 Change l'index ici si tu veux tester avec un autre jeu de donnée du tableau ci-dessus.
 
 L'index "0" correspond à :
@@ -104,59 +104,65 @@ L'index "0" correspond à :
 ],
 
 */
-$dataSent = $dataSentArray[0];
+$dataSent = $dataSentArray[2];
 
-// -- Ton algo ici 
+// -- Ton algo ici
 
-// Initialisation des variables utiles
-$total = 0;
-$percentage = 0;
-$startup = 0;
-$lines = [];
-$additional = [];
+/* 1. Temps de base */
 
-$design = $dataSent['designType'];
-$project = $dataSent['projectType'];
-
-
-// Ajout des pourcentages de temps supplémentaires
-$percentage += $designTypes[$design]['total_percentage'];
-$percentage += $projectTypes[$project]['total_percentage'];
-
-// Ajout du temps de mise en place
-$lines[] = [
+// Mise en place
+$startup_line = [
     'name' => 'Mise en place du projet',
-    'time' => $projectTypes[$project]['startup_time']
+    'time' => $projectTypes[$dataSent['projectType']]['startup_time']
 ];
 
-// Ajout du temps de mise en place au total
-$total += $projectTypes[$project]['startup_time'];
-
-// Ajout des temps de développements génériques
-foreach ($dataSent['genericDevelopments'] as $development) {
-    $devTime = $genericDevelopments[$development];
-    $total += $devTime;
-
-    $lines[] = [
+// Développement des fonctionnalités génériques
+$generics_lines = array_map(
+    fn ($development) => [
         'name' => $development,
-        'time' => $devTime
-    ];
-}
+        'time' => $genericDevelopments[$development],
+    ],
+    $dataSent['genericDevelopments'],
+);
 
-// Ajouts des temps additionnels
-$additional[] = [
-    'name' => 'Type de projet : ' . $project,
-    'time' => $total * $projectTypes[$project]['total_percentage'] / 100
+// Lignes des développements (startup + generics)
+$lines = [$startup_line, ...$generics_lines];
+
+// Calcul du temps de base = sous-total des temps de développement
+$subtotal = array_reduce(
+    $lines,
+    fn ($carry, $item) => $carry + $item['time'],
+    0,
+);
+
+/* 2. Temps additionnels */
+// Retourne le pourcentage à appliquer sur le total
+// en fonction du jeu de données choisis
+$get_total_percentage = fn ($dataSent) => fn ($types) => fn ($type) => $types[$dataSent[$type]]['total_percentage'];
+
+// Tableau des pourcentages à appliquer
+$percentage_from_dataSent = $get_total_percentage($dataSent);
+$percentages = [
+    'project' => $percentage_from_dataSent($projectTypes)('projectType'),
+    'design' => $percentage_from_dataSent($designTypes)('designType'),
 ];
 
-$additional[] = [
-    'name' => 'Type de design: ' . $design,
-    'time' => $total * $designTypes[$design]['total_percentage'] / 100
-];
+// Lignes des développements additionnels
+$additional = array_map(
+    fn ($type) => [
+        'name' => 'Type de ' . $type . ' : ' . $dataSent[$type . 'Type'],
+        'time' => $subtotal * $percentages[$type] / 100,
+    ],
+    array_keys($percentages),
+);
 
-
-$total += round($total * $percentage / 100);
-
+/* 3. Calcul du total de temps */
+// Temps de base + temps des additionnels
+$total = round(array_reduce(
+    $additional,
+    fn ($carry, $item) => $carry + $item['time'],
+    $subtotal,
+));
 
 // Le résultat devra avoir cette forme, à toi de remplir le total, le tableau de lignes et les lignes de temps additionnel.
 $result = [

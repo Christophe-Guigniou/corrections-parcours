@@ -1,14 +1,17 @@
-const InputSelect = ({ label, selected, setSelected, options }) => {
-
+const InputSelect = ({ name, label, selected, setSelected, options }) => {
     const handleChange = (evt) => {
-        setSelected(evt.target.value);
+        const { name, value } = evt.target;
+        setSelected({
+            name,
+            value,
+        });
     };
 
     return (
         <div className="input-group">
             <span className="main-label">{label}</span>
 
-            <select name="project-type" onChange={handleChange}>
+            <select name={name} onChange={handleChange}>
                 {options.map(option => (
                     <option
                         key={option.value}

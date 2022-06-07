@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { createEstimate, getItems } from '../../api/model';
@@ -9,14 +9,21 @@ import InputSelect from '../../Components/Forms/InputSelect';
 import InputSpecificDevelopments from '../../Components/Forms/InputSpecificDevelopments';
 import InputText from '../../Components/Forms/InputText';
 
-const Home = () => {
-    let navigate = useNavigate();
+const initialState = {
+    projectName: '',
+    projectType: '',
+    designType: '',
+    genericDevelopments: [],
+    specificDevelopments: [],
+};
 
-    const [projectName, setProjectName] = useState('');
-    const [projectType, setProjectType] = useState('');
-    const [designType, setDesignType] = useState('');
-    const [genericDevelopments, setGenericDevelopments] = useState([]);
-    const [specificDevelopments, setSpecificDevelopments] = useState([]);
+const reducer = (state, newVal) => ({ ...state, ...newVal });
+
+const Home = () => {
+    const navigate = useNavigate();
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     const [error, setError] = useState('');
 
     const [fields, setFields] = useState({});
@@ -24,17 +31,10 @@ const Home = () => {
 
     const calcEstimation = (evt) => {
         evt.preventDefault();
-        const dataToSubmit = {
-            projectName,
-            projectType,
-            designType,
-            genericDevelopments,
-            specificDevelopments,
-        };
 
         setIsLoading(true);
-
-        createEstimate(dataToSubmit)
+        console.log(state);
+        createEstimate(state)
             .then((estimation) => {
                 setIsLoading(false);
                 navigate('/estimation/' + estimation.id);
@@ -44,6 +44,14 @@ const Home = () => {
                 console.log(error.response.data);
                 setError(error.response.data);
             });
+    };
+
+    /**
+     * @param {{ name: string, value: string|string[]}} target
+     */
+    const handleChange = (target) => {
+        const { name, value } = target;
+        dispatch({ [name]: value });
     };
 
     useEffect(() => {
@@ -58,6 +66,14 @@ const Home = () => {
         return <></>;
     }
 
+    const {
+        projectName,
+        projectType,
+        designType,
+        genericDevelopments,
+        specificDevelopments,
+    } = state;
+
     return (
         <main className="main-content">
             <h1 className="main-title">Calculator</h1>
@@ -67,12 +83,13 @@ const Home = () => {
                    {error.message}
                 </div>}
 
-                <InputText name={fields.projectName.slug} label={fields.projectName.name} value={projectName} setValue={setProjectName} />
+                <InputText name={fields.projectName.slug} label={fields.projectName.name} value={projectName} setValue={handleChange} />
 
                 <InputSelect
+                    name="projectType"
                     label={fields.projectType.name}
                     selected={projectType}
-                    setSelected={setProjectType}
+                    setSelected={handleChange}
                     options={[
                         { value: '', label: 'Choisir un type de projet' },
                         ...fields.projectType.values,
@@ -80,22 +97,25 @@ const Home = () => {
                 />
 
                 <InputCheckboxes
+                    name="genericDevelopments"
                     label={fields.genericDevelopments.name}
                     selected={genericDevelopments}
-                    setSelected={setGenericDevelopments}
+                    setSelected={handleChange}
                     checkboxes={fields.genericDevelopments.values}
                 />
 
                 <InputSpecificDevelopments
+                    name="specificDevelopments"
                     label={fields.specificDevelopments.name}
                     specificDevelopments={specificDevelopments}
-                    setSpecificDevelopments={setSpecificDevelopments}
+                    setSpecificDevelopments={handleChange}
                 />
 
                 <InputSelect
+                    name="designType"
                     label={fields.designType.name}
                     selected={designType}
-                    setSelected={setDesignType}
+                    setSelected={handleChange}
                     options={[
                         { value: '', label: 'Choisir un type de design' },
                         ...fields.designType.values

@@ -1,25 +1,36 @@
 import { specificDevelopmentsFields } from '../../data/form';
 
-const InputSpecificDevelopments = ({ label, specificDevelopments, setSpecificDevelopments }) => {
+const InputSpecificDevelopments = ({ name, label, specificDevelopments, setSpecificDevelopments }) => {
 
     const handleChangeInputs = (evt, index) => {
         const newSpecificDevelopments = [...specificDevelopments];
         newSpecificDevelopments[index][evt.target.name] = evt.target.value;
-        setSpecificDevelopments(newSpecificDevelopments);
+
+        setSpecificDevelopments({
+            name,
+            value: newSpecificDevelopments,
+        });
     };
 
     const addSpecificDev = (evt) => {
         evt.preventDefault();
 
-        setSpecificDevelopments([
-            ...specificDevelopments, {...specificDevelopmentsFields}
-        ]);
+        setSpecificDevelopments({
+            name,
+            value: [
+                ...specificDevelopments,
+                { ...specificDevelopmentsFields },
+            ],
+        });
     };
 
     const removeSpecificDev = (evt, index) => {
         evt.preventDefault();
 
-        setSpecificDevelopments(specificDevelopments.filter((_, i) => i !== index));
+        setSpecificDevelopments({
+            name,
+            value: specificDevelopments.filter((_, i) => i !== index),
+        });
     };
 
     return (

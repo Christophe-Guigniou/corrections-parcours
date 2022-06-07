@@ -1,11 +1,16 @@
-const InputCheckboxes = ({ label, selected, setSelected, checkboxes }) => {
-
+const InputCheckboxes = ({ name, label, selected, setSelected, checkboxes }) => {
     const handleChange = (evt) => {
-        if (selected.includes(evt.target.value)) {
-            setSelected(selected.filter((item) => item !== evt.target.value));
-        } else {
-            setSelected([...selected, evt.target.value]);
-        }
+        const { value } = evt.target;
+        const values = [...selected];
+
+        const newValue = values.includes(value)
+            ? values.filter((v) => v !== value)
+            : [...values, value];
+
+        setSelected({
+            name,
+            value: newValue,
+        });
     };
 
     return (
